@@ -1,6 +1,6 @@
 ﻿namespace SpatialHashTable.CullingSystem
 {
-    public class CullSystemDependencyManager : SpatialHashDependencyManager<CullableObjectTagBase>
+    public class CullSystemDependencyManager : SpatialHashDependencyManager<CullableObjectTag>
     {
         // Start is called before the first frame update
         void Awake()
@@ -10,7 +10,7 @@
 
         public override void GetAllManagers()
         {
-            HashManagersList.AddRange( FindObjectsOfType<CullSystemManagerBase>());
+            HashManagersList.AddRange( FindObjectsOfType<CullSystemManager>());
           
         }
 

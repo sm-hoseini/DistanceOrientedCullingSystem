@@ -2,7 +2,7 @@
 
 namespace SpatialHashTable.CullingSystem
 {
-    public class CullableObjectTagBase : SpatialTagBase
+    public class CullableObjectTag : SpatialTagBase
     {
         List<ICullableObject> cullableObjects = new List<ICullableObject>();
         private bool isCulled;

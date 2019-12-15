@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SpatialHashTable.CullingSystem
 {
-    public class CullSystemManagerBase : SpatialHashManagerBase<CullableObjectTagBase>
+    public sealed class CullSystemManager : SpatialHashManagerBase<CullableObjectTag>
     {
         [SerializeField] private float cullDistance;
 
@@ -42,7 +42,7 @@ namespace SpatialHashTable.CullingSystem
             previousCullIndices.AddRange(currentCullIndices);
         }
 
-        public override void AddObject(CullableObjectTagBase Obj)
+        public override void AddObject(CullableObjectTag Obj)
         {
             base.AddObject(Obj);
             
@@ -57,7 +57,7 @@ namespace SpatialHashTable.CullingSystem
                 }
         }
 
-        public override void RemoveObject(CullableObjectTagBase Obj)
+        public override void RemoveObject(CullableObjectTag Obj)
         {
             base.RemoveObject(Obj);
             Obj.UnCullChildrenTags();
