@@ -18,6 +18,7 @@ namespace SpatialHashTable
             {
                 throw new InvalidOperationException($" No SpatialHashMangerSystem has been defined for spatialTag with HashManagerSystemID:{tag.HashManagerSystemID}  ");
             }
+            tag.SpatialIndex = manager.Vector3ToSpatialIndex(tag.Position);
             manager.AddObject(tag);
             if (!isStatic)
             {
@@ -28,11 +29,9 @@ namespace SpatialHashTable
         public void RemoveTagFromSystem(T tag)
         {
             var manager = HashManagersList.Find(x => x.HashTableSystemID == tag.HashManagerSystemID);
-            if (manager==null)
-            {
-                throw new InvalidOperationException($" No SpatialHashMangerSystem has been defined for spatialTag with HashManagerSystemID:{tag.HashManagerSystemID}  ");
-            }
+            if (manager == null) return;
             manager.RemoveObject(tag);
+            manager.UnSubscribeToUpdateList(tag);
            
             
         }
