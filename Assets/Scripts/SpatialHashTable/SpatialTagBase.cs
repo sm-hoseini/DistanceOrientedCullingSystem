@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace SpatialHashTable
 {
@@ -16,9 +17,6 @@ namespace SpatialHashTable
 
         public SpatialIndex SpatialIndex { get;  set; }
 
-
-     
-
-    
+        protected abstract void OnDestroy();
     }
 }

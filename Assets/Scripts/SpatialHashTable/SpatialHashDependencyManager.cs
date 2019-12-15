@@ -25,6 +25,17 @@ namespace SpatialHashTable
             }
         
         }
+        public void RemoveTagFromSystem(T tag)
+        {
+            var manager = HashManagersList.Find(x => x.HashTableSystemID == tag.HashManagerSystemID);
+            if (manager==null)
+            {
+                throw new InvalidOperationException($" No SpatialHashMangerSystem has been defined for spatialTag with HashManagerSystemID:{tag.HashManagerSystemID}  ");
+            }
+            manager.RemoveObject(tag);
+           
+            
+        }
         // Update is called once per frame
    
     }

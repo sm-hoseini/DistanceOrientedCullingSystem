@@ -6,7 +6,7 @@ namespace SpatialHashTable.CullingSystem
     {
         List<ICullableObject> cullableObjects = new List<ICullableObject>();
         private bool isCulled;
-
+        private CullSystemDependencyManager dependencyManager;
         private void Start()
         {
             Initiate();
@@ -24,8 +24,13 @@ namespace SpatialHashTable.CullingSystem
             }
 
 
-            var dependencyManager = FindObjectOfType<CullSystemDependencyManager>();
+             dependencyManager = FindObjectOfType<CullSystemDependencyManager>();
             dependencyManager.AddTagToManagerSystem(this, isStatic);
+        }
+
+        protected override void OnDestroy()
+        {
+            dependencyManager.RemoveTagFromSystem(this);
         }
 
         public void CullChildrenTags()

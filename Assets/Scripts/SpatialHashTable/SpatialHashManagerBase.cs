@@ -46,6 +46,7 @@ namespace SpatialHashTable
         public virtual void RemoveObject(T Obj)
         {
             objectsTable[Obj.SpatialIndex].Remove(Obj);
+            objectsUpdateQuerry.Remove(Obj);
             if (objectsTable[Obj.SpatialIndex].Count == 0)
             {
                 cachIsDerty = true;
