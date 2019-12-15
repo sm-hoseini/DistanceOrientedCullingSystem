@@ -31,8 +31,8 @@ namespace SpatialHashTable
         public virtual void AddObject(T Obj)
         {
             // GetSpacialIndexes(Obj.Position, out int x, out int y, out int z);
-            //var spatialIndex = new SpatialIndex(x, y, z);
-            var spatialIndex = Obj.SpatialIndex;
+           // var spatialIndex =Vector3ToSpatialIndex(Obj.Position);
+          var spatialIndex = Obj.SpatialIndex;
             if (!objectsTable.ContainsKey(spatialIndex))
             {
                 objectsTable.Add(spatialIndex, new List<T>(5));
@@ -46,7 +46,7 @@ namespace SpatialHashTable
         public virtual void RemoveObject(T Obj)
         {
             objectsTable[Obj.SpatialIndex].Remove(Obj);
-            objectsUpdateQuerry.Remove(Obj);
+           
             if (objectsTable[Obj.SpatialIndex].Count == 0)
             {
                 cachIsDerty = true;
@@ -79,6 +79,12 @@ namespace SpatialHashTable
                 objectsUpdateQuerry.Add(obj);
             }
         }
+        public void UnSubscribeToUpdateList(T obj)
+        {
+            
+                objectsUpdateQuerry.Remove(obj);;
+        }
+        
         // SpatialIndex temp = new SpatialIndex();
 
 
@@ -250,12 +256,19 @@ namespace SpatialHashTable
                    !cachIsDerty;
         }
 
-        protected SpatialIndex Vector3ToSpatialIndex(Vector3 position)
+        public SpatialIndex Vector3ToSpatialIndex(Vector3 position)
         {
             GetSpacialIndexes(position, out int x, out int y, out int z);
             return new SpatialIndex(x, y, z);
         }
 
+        protected bool IsIndextInRange( SpatialIndex a,  SpatialIndex b, float range)
+        {
+            var xRange = Mathf.CeilToInt(range / cellSizeX);
+            var yRange = Mathf.CeilToInt(range / cellSizeY);
+            var zRange = Mathf.CeilToInt(range / cellSizeZ);
+            return (Mathf.Abs(a.X - b.X) <= xRange && Mathf.Abs(a.Y - b.Y) <= yRange && Mathf.Abs(a.Z - b.Z) <= zRange);
+        }
         private void OnDrawGizmos()
         {
             if (visualize)
