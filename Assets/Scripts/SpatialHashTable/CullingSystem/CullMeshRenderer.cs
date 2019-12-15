@@ -14,10 +14,7 @@ namespace SpatialHashTable.CullingSystem
         }
 
         // Update is called once per frame
-        void Update()
-        {
-        
-        }
+      
 
         public int CullSystemID => cullSystemID;
         public void OnCulled()
