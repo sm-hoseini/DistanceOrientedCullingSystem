@@ -24,6 +24,12 @@ namespace SpatialHashTable.CullingSystem
             subtractedIndices.AddRange(previousCullIndices.Except(currentCullIndices));
             foreach (var index in subtractedIndices)
             {
+                if (!objectsTable.ContainsKey(index))
+                {
+                continue;//previous cache is really out of date
+                }
+
+
                 foreach (var cullableObjectTag in objectsTable[index])
                 {
                     cullableObjectTag.CullChildrenTags();
@@ -50,7 +56,11 @@ namespace SpatialHashTable.CullingSystem
                 {
                     Obj.UnCullChildrenTags();
                 }
-                else
+                else if (IsIndextInRange(catchCullCenterIndex, Obj.SpatialIndex, cullDistance))
+                {
+                    Obj.UnCullChildrenTags();
+                    previousCullIndices.Add(Obj.SpatialIndex);
+                }else
                 {
                     Obj.CullChildrenTags();
 
