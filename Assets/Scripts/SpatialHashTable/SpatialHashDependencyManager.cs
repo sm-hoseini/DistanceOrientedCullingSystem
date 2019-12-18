@@ -9,7 +9,7 @@ namespace SpatialHashTable
         protected List<SpatialHashManagerBase<T> > HashManagersList= new List<SpatialHashManagerBase<T>>();
         // Start is called before the first frame update
    
-        public abstract void GetAllManagers();
+        public abstract void GetDependencies();
 
         public void AddTagToManagerSystem(T tag,bool isStatic)
         {
