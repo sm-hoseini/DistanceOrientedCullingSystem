@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace SpatialHashTable.CullingSystem
 {
-    public sealed class CullSystemManager : SpatialHashManagerBase<CullableObjectTag>
+    public interface ICullSystemManager
+    {
+        void SetCenter(Vector3 position);
+    }
+    public sealed class CullSystemManager : SpatialHashManagerBase<CullableObjectTag>,ICullSystemManager
     {
         [SerializeField] private float cullDistance;
 
@@ -26,7 +31,7 @@ namespace SpatialHashTable.CullingSystem
             {
                 if (!objectsTable.ContainsKey(index))
                 {
-                continue;//previous cache is really out of date
+                    continue; //previous cache is really out of date
                 }
 
 
@@ -51,20 +56,20 @@ namespace SpatialHashTable.CullingSystem
         public override void AddObject(CullableObjectTag Obj)
         {
             base.AddObject(Obj);
-            
-                if (previousCullIndices.Contains(Obj.SpatialIndex))
-                {
-                    Obj.UnCullChildrenTags();
-                }
-                else if (IsIndextInRange(catchCullCenterIndex, Obj.SpatialIndex, cullDistance))
-                {
-                    Obj.UnCullChildrenTags();
-                    previousCullIndices.Add(Obj.SpatialIndex);
-                }else
-                {
-                    Obj.CullChildrenTags();
 
-                }
+            if (previousCullIndices.Contains(Obj.SpatialIndex))
+            {
+                Obj.UnCullChildrenTags();
+            }
+            else if (IsIndextInRange(catchCullCenterIndex, Obj.SpatialIndex, cullDistance))
+            {
+                Obj.UnCullChildrenTags();
+                previousCullIndices.Add(Obj.SpatialIndex);
+            }
+            else
+            {
+                Obj.CullChildrenTags();
+            }
         }
 
         public override void RemoveObject(CullableObjectTag Obj)
@@ -73,10 +78,6 @@ namespace SpatialHashTable.CullingSystem
             Obj.UnCullChildrenTags();
         }
 
-        [SerializeField] private Transform dummyCenter;
-        private void Update()
-        {
-            SetCenter(dummyCenter.position);
-        }
+
     }
 }
