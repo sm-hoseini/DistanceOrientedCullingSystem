@@ -2,28 +2,35 @@
 
 namespace SpatialHashTable.CullingSystem
 {
-    public class CullMeshRenderer : MonoBehaviour,ICullableObject
+    public class CullMeshRenderer :CullableObjectBase
     {
-        [SerializeField] private int cullSystemID;
-        //List<MeshRenderer>meshRenderers= new List<MeshRenderer>(2);
         private MeshRenderer meshRenderer;
         // Start is called before the first frame update
-        void Awake()
+        void Start()
         {
-            meshRenderer = GetComponent<MeshRenderer>();
+            if (contentIsConstant)
+            {
+                UpdateObjectList();
+            }
         }
 
         // Update is called once per frame
       
 
-        public int CullSystemID => cullSystemID;
-        public void OnCulled()
+        protected override void UpdateObjectList()
         {
+            meshRenderer = GetComponent<MeshRenderer>();
+        }
+
+        public override void OnCulled()
+        {
+            base.OnCulled();
             meshRenderer.enabled = false;
         }
 
-        public void OnUnCulled()
+        public override void OnUnCulled()
         {
+            base.OnUnCulled();
             meshRenderer.enabled = true;
         }
     }
