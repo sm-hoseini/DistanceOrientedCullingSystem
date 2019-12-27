@@ -14,12 +14,14 @@ namespace SpatialHashTable.CullingSystem
         public void Initiate(ICullSystemManager cullSystemManager)
         {
             this.cullSystemManager = cullSystemManager;
+            isInitiated=true;
         }
         private float lastUpdateTime;
+        private bool isInitiated;
 
         private void Update()
         {
-            if (Time.time > lastUpdateTime + updateTimeStep)
+            if (isInitiated && Time.time > lastUpdateTime + updateTimeStep)
             {
                 lastUpdateTime = Time.time;
                 UpdateCenterPosition(centerOfCullSystem.position);

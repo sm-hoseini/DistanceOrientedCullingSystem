@@ -7,30 +7,40 @@ namespace SpatialHashTable.CullingSystem
         List<ICullableObject> cullableObjects = new List<ICullableObject>();
         private bool isCulled;
         private CullSystemDependencyManager dependencyManager;
+
         private void Start()
         {
-            Initiate();
+            dependencyManager = FindObjectOfType<CullSystemDependencyManager>();
+          
+            if (dependencyManager != null && !IsInitiated)//the rest should be run only when the Tag  created after DependencyManager was inititated.  in run time other wise the dependency manager will handel registration by itself
+            {
+                dependencyManager.RegisterToDependencyManager(this);
+            }
         }
 
-        protected override void Initiate()
+        public override void Initiate()
         {
+            if (IsInitiated) return;
             var cullableComponents = GetComponentsInChildren<ICullableObject>();
             foreach (var cullableObject in cullableComponents)
             {
                 if (cullableObject.CullSystemID == HashManagerSystemID)
                 {
                     cullableObjects.Add(cullableObject);
+                    cullableObject.OnConnectToCullTag(this);
                 }
             }
 
-
-             dependencyManager = FindObjectOfType<CullSystemDependencyManager>();
-            dependencyManager.AddTagToManagerSystem(this, isStatic);
+            IsInitiated = true;
         }
+
+      
+
 
         protected override void OnDestroy()
         {
-            dependencyManager.RemoveTagFromSystem(this);
+            if (dependencyManager != null)
+                dependencyManager.RemoveTagFromSystem(this);
         }
 
         public void CullChildrenTags()
@@ -53,6 +63,11 @@ namespace SpatialHashTable.CullingSystem
             }
 
             isCulled = false;
+        }
+
+        public void RemoveCullableObject(CullableObjectBase cullableObject)
+        {
+            cullableObjects.Remove(cullableObject);
         }
     }
 }

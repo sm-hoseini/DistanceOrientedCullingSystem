@@ -8,9 +8,10 @@ namespace SpatialHashTable
 
         [SerializeField]
         protected bool isStatic;
-
+        public bool IsInitiated { get;protected set; }
         [SerializeField] private int hashTablleManagerID = 0;
-        protected abstract void Initiate();
+        public abstract void Initiate();
+        public bool IsStatic => isStatic;
 
         public Vector3 Position => transform.position;
         public int HashManagerSystemID => hashTablleManagerID;
